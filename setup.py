@@ -13,6 +13,7 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires=[
+        "enum34 ; python_version<='3.0'",
         'pylint>=1.9.2',
     ],
     setup_requires=['pytest-runner'],
