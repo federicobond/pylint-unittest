@@ -28,10 +28,10 @@ under the MASTER section.
 
 # Rules
 
-### `wrong-assertion`
+### wrong-assertion
 
 This rule will complain if you use assert{Is,Equal} with True, False or None as
-arguments instead of the respactive`assertTrue`, `assertFalse`, `assertIsNone`.
+arguments instead of the respective `assertTrue`, `assertFalse`, `assertIsNone`.
 
 
 # License
