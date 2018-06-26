@@ -1,5 +1,5 @@
 """Models."""
-from astroid.nodes import ClassDef, FunctionDef, Expr, Const, Attribute, Name
+from astroid.nodes import Call, ClassDef, FunctionDef, Expr, Const, Attribute, Name
 
 from pylint.interfaces import IAstroidChecker
 from pylint.checkers.utils import check_messages
@@ -35,7 +35,7 @@ DEPRECATED_ALIASES = {
 }
 
 
-def is_method(node):
+def is_self_method(node):
     return (isinstance(node, Attribute) and
             isinstance(node.expr, Name) and
             node.expr.name == 'self')
@@ -64,7 +64,7 @@ class UnittestAssertionsChecker(BaseChecker):
         if not self._is_testcase:
             return
 
-        if not is_method(node.func):
+        if not is_self_method(node.func):
             return
 
         funcname = node.func.attrname
@@ -97,3 +97,21 @@ class UnittestAssertionsChecker(BaseChecker):
         if funcname in DEPRECATED_ALIASES:
             new_name = DEPRECATED_ALIASES[funcname]
             self.add_message('deprecated-unittest-alias', args=(funcname, new_name), node=node)
+
+        if funcname in ('assertTrue', 'assertFalse'):
+            if node.args:
+                arg = node.args[0]
+
+                if isinstance(arg, Call) and arg.func.name == 'isinstance':
+                    if funcname == 'assertTrue':
+                        self.add_message(
+                            'wrong-assert',
+                            args=('assertIsInstance(x, Class)', 'assertTrue(isinstance(x, Class))'),
+                            node=node
+                        )
+                    else:
+                        self.add_message(
+                            'wrong-assert',
+                            args=('assertIsNotInstance(x, Class)', 'assertFalse(isinstance(x, Class))'),
+                            node=node
+                        )

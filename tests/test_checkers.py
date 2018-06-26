@@ -140,3 +140,43 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
             self.checker.visit_classdef(class_node)
             self.checker.visit_call(assert_node)
             self.checker.leave_classdef(class_node)
+
+    def test_isinstance(self):
+        class_node, assert_node = astroid.extract_node("""
+        import unittest
+
+        class Tests(unittest.TestCase): #@
+            def test_foo():
+                self.assertTrue(isinstance(a, Class)) #@
+        """)
+
+        with self.assertAddsMessages(
+            pylint.testutils.Message(
+                msg_id='wrong-assert',
+                args=('assertIsInstance(x, Class)', 'assertTrue(isinstance(x, Class))'),
+                node=assert_node,
+            ),
+        ):
+            self.checker.visit_classdef(class_node)
+            self.checker.visit_call(assert_node)
+            self.checker.leave_classdef(class_node)
+
+    def test_isnotinstance(self):
+        class_node, assert_node = astroid.extract_node("""
+        import unittest
+
+        class Tests(unittest.TestCase): #@
+            def test_foo():
+                self.assertFalse(isinstance(a, Class)) #@
+        """)
+
+        with self.assertAddsMessages(
+            pylint.testutils.Message(
+                msg_id='wrong-assert',
+                args=('assertIsNotInstance(x, Class)', 'assertFalse(isinstance(x, Class))'),
+                node=assert_node,
+            ),
+        ):
+            self.checker.visit_classdef(class_node)
+            self.checker.visit_call(assert_node)
+            self.checker.leave_classdef(class_node)
