@@ -35,7 +35,7 @@ arguments instead of the respective `assertTrue`, `assertFalse`, `assertIsNone`.
 
 ### deprecated-unittest-alias
 
-This rule will complain if you use a deprecated unittest alias`. See [this](https://docs.python.org/2/library/unittest.html#deprecated-aliases)
+This rule will complain if you use a deprecated unittest alias. See [here](https://docs.python.org/2/library/unittest.html#deprecated-aliases)
 for more information.
 
 # License
