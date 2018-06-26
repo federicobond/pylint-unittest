@@ -18,7 +18,7 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         with self.assertAddsMessages(
             pylint.testutils.Message(
                 msg_id='wrong-assert',
-                args=('Use assertTrue(x) instead of assertEqual(x, True)',),
+                args=('assertTrue(x) or assertIs(x, True)', 'assertEqual(x, True)'),
                 node=assert_node,
             ),
         ):
@@ -38,7 +38,7 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         with self.assertAddsMessages(
             pylint.testutils.Message(
                 msg_id='wrong-assert',
-                args=('Use assertFalse(x) instead of assertEqual(x, False)',),
+                args=('assertFalse(x) or assertIs(x, False)', 'assertEqual(x, False)',),
                 node=assert_node,
             ),
         ):
@@ -58,7 +58,7 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         with self.assertAddsMessages(
             pylint.testutils.Message(
                 msg_id='wrong-assert',
-                args=('Use assertIsNone(x) instead of assertEqual(x, None)',),
+                args=('assertIsNone(x)', 'assertEqual(x, None)',),
                 node=assert_node,
             ),
         ):
@@ -78,7 +78,62 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         with self.assertAddsMessages(
             pylint.testutils.Message(
                 msg_id='wrong-assert',
-                args=('Use assertIsNone(x) instead of assertEqual(x, None)',),
+                args=('assertIsNone(x)', 'assertEqual(x, None)'),
+                node=assert_node,
+            ),
+        ):
+            self.checker.visit_classdef(class_node)
+            self.checker.visit_call(assert_node)
+            self.checker.leave_classdef(class_node)
+
+    def test_works_with_TestCase_subclasses(self):
+        class_node, assert_node = astroid.extract_node("""
+        import unittest
+
+        class BaseTestCase(unittest.TestCase):
+            pass
+
+        class Tests(BaseTestCase): #@
+            def test_foo():
+                self.assertEqual(a, True) #@
+        """)
+
+        with self.assertAddsMessages(
+            pylint.testutils.Message(
+                msg_id='wrong-assert',
+                args=('assertTrue(x) or assertIs(x, True)', 'assertEqual(x, True)'),
+                node=assert_node,
+            ),
+        ):
+            self.checker.visit_classdef(class_node)
+            self.checker.visit_call(assert_node)
+            self.checker.leave_classdef(class_node)
+
+    def test_ignores_non_TestCase_subclasses(self):
+        class_node, assert_node = astroid.extract_node("""
+        class Tests(object): #@
+            def test_foo():
+                self.assertEqual(a, True) #@
+        """)
+
+        with self.assertNoMessages():
+            self.checker.visit_classdef(class_node)
+            self.checker.visit_call(assert_node)
+            self.checker.leave_classdef(class_node)
+
+    def test_deprecated_alias(self):
+        class_node, assert_node = astroid.extract_node("""
+        import unittest
+
+        class Tests(unittest.TestCase): #@
+            def test_foo():
+                self.failIfEqual(a, None) #@
+        """)
+
+        with self.assertAddsMessages(
+            pylint.testutils.Message(
+                msg_id='deprecated-unittest-alias',
+                args=('failIfEqual', 'assertNotEqual'),
                 node=assert_node,
             ),
         ):

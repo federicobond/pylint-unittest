@@ -28,11 +28,15 @@ under the MASTER section.
 
 # Rules
 
-### wrong-assertion
+### wrong-assertion
 
-This rule will complain if you use assert{Is,Equal} with True, False or None as
+This rule will complain if you use assertEqual with True, False or None as
 arguments instead of the respective `assertTrue`, `assertFalse`, `assertIsNone`.
 
+### deprecated-unittest-alias
+
+This rule will complain if you use a deprecated unittest alias`. See [this](https://docs.python.org/2/library/unittest.html#deprecated-aliases)
+for more information.
 
 # License
 
