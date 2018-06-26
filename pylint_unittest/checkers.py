@@ -73,12 +73,26 @@ class UnittestAssertionsChecker(BaseChecker):
             for arg in node.args[:2]:
                 if not isinstance(arg, Const):
                     continue
-                if node.func.attrname == 'assertEqual' and arg.value is True:
-                    self.add_message('wrong-assert', args=('assertTrue(x) or assertIs(x, True)', 'assertEqual(x, True)'), node=node)
-                elif node.func.attrname == 'assertEqual' and arg.value is False:
-                    self.add_message('wrong-assert', args=('assertFalse(x) or assertIs(x, False)', 'assertEqual(x, False)'), node=node)
+
+                if funcname == 'assertEqual' and arg.value is True:
+                    self.add_message(
+                        'wrong-assert',
+                        args=('assertTrue(x) or assertIs(x, True)', 'assertEqual(x, True)'),
+                        node=node
+                    )
+
+                elif funcname == 'assertEqual' and arg.value is False:
+                    self.add_message(
+                        'wrong-assert',
+                        args=('assertFalse(x) or assertIs(x, False)', 'assertEqual(x, False)'),
+                        node=node
+                    )
                 elif arg.value is None:
-                    self.add_message('wrong-assert', args=('assertIsNone(x)', 'assertEqual(x, None)'), node=node)
+                    self.add_message(
+                        'wrong-assert',
+                        args=('assertIsNone(x)', 'assertEqual(x, None)'),
+                        node=node
+                    )
 
         if funcname in DEPRECATED_ALIASES:
             new_name = DEPRECATED_ALIASES[funcname]
