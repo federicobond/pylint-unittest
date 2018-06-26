@@ -102,7 +102,10 @@ class UnittestAssertionsChecker(BaseChecker):
             if node.args:
                 arg = node.args[0]
 
-                if isinstance(arg, Call) and arg.func.name == 'isinstance':
+                if (isinstance(arg, Call) and
+                        isinstance(arg.func, Name) and
+                        arg.func.name == 'isinstance'):
+
                     if funcname == 'assertTrue':
                         self.add_message(
                             'wrong-assert',

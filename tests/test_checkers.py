@@ -161,6 +161,21 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
             self.checker.visit_call(assert_node)
             self.checker.leave_classdef(class_node)
 
+    def test_isinstance_does_not_fail_with_other_expression(self):
+        class_node, assert_node = astroid.extract_node("""
+        import unittest
+
+        class Tests(unittest.TestCase): #@
+            def test_foo():
+                form = Form()
+                self.assertTrue(form.is_valid()) #@
+        """)
+
+        with self.assertNoMessages():
+            self.checker.visit_classdef(class_node)
+            self.checker.visit_call(assert_node)
+            self.checker.leave_classdef(class_node)
+
     def test_isnotinstance(self):
         class_node, assert_node = astroid.extract_node("""
         import unittest
