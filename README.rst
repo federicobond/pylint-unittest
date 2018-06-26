@@ -1,8 +1,13 @@
 pylint-unittest
 ===============
 
-`Build Status <https://travis-ci.org/federicobond/pylint-unittest>`__
-`Latest Version <https://pypi.python.org/pypi/pylint-unittest>`__
+.. image:: https://travis-ci.org/federicobond/pylint-unittest.svg?branch=master
+    :alt: Build Status
+    :target: https://travis-ci.org/federicobond/pylint-unittest
+
+.. image:: https://img.shields.io/pypi/v/pylint-unittest.svg
+    :alt: Latest Version
+    :target: https://pypi.python.org/pypi/pylint-unittest
 
 About
 =====
