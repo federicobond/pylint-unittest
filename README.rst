@@ -10,20 +10,20 @@ pylint-unittest
     :target: https://pypi.python.org/pypi/pylint-unittest
 
 About
-=====
+-----
 
 ``pylint-unittest`` is a `Pylint <http://pylint.org>`__ plugin for
 detecting incorrect use of unittest assertions.
 
 Installation
-============
+------------
 
 ::
 
    pip install pylint-unittest
 
 Usage
-=====
+-----
 
 Ensure ``pylint-unittest`` is installed and then execute:
 
@@ -35,7 +35,7 @@ Alternatively, add ``load_plugins=pylint_unittest`` to your ``pylintrc``
 file, under the MASTER section.
 
 Rules
-=====
+-----
 
 wrong-assertion
 ~~~~~~~~~~~~~~~
@@ -52,6 +52,6 @@ This rule will complain if you use a deprecated unittest alias. See
 for more information.
 
 License
-=======
+-------
 
 GPL-3.0
