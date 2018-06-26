@@ -1,4 +1,3 @@
-"""Models."""
 from astroid.nodes import Call, ClassDef, FunctionDef, Expr, Const, Attribute, Name
 
 from pylint.interfaces import IAstroidChecker
