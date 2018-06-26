@@ -1,6 +1,12 @@
 # coding: UTF-8
 
+import os
+
 from setuptools import setup, find_packages
+
+
+def read(fname):
+    return open(os.path.join(os.path.dirname(__file__), fname)).read()
 
 
 setup(
@@ -9,6 +15,7 @@ setup(
     author='Federico Bond',
     author_email='federicobond@gmail.com',
     description='A Pylint plugin for detecting incorrect use of unittest assertions',
+    long_description=read('README.rst'),
     version='0.1.1',
     packages=find_packages(),
     include_package_data=True,
