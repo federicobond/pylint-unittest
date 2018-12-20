@@ -1,9 +1,10 @@
 import astroid
 import pylint_unittest
 import pylint.testutils
+from pylint.testutils import CheckerTestCase, Message
 
 
-class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
+class TestUniqueReturnChecker(CheckerTestCase):
     CHECKER_CLASS = pylint_unittest.checkers.UnittestAssertionsChecker
 
     def test_assertEqual_true(self):
@@ -16,7 +17,7 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            Message(
                 msg_id='wrong-assert',
                 args=('assertTrue(x) or assertIs(x, True)', 'assertEqual(x, True)'),
                 node=assert_node,
@@ -36,7 +37,7 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            Message(
                 msg_id='wrong-assert',
                 args=('assertFalse(x) or assertIs(x, False)', 'assertEqual(x, False)',),
                 node=assert_node,
@@ -56,7 +57,7 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            Message(
                 msg_id='wrong-assert',
                 args=('assertIsNone(x)', 'assertEqual(x, None)',),
                 node=assert_node,
@@ -76,7 +77,7 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            Message(
                 msg_id='wrong-assert',
                 args=('assertIsNone(x)', 'assertEqual(x, None)'),
                 node=assert_node,
@@ -99,7 +100,7 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            Message(
                 msg_id='wrong-assert',
                 args=('assertTrue(x) or assertIs(x, True)', 'assertEqual(x, True)'),
                 node=assert_node,
@@ -131,7 +132,7 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            Message(
                 msg_id='deprecated-unittest-alias',
                 args=('failIfEqual', 'assertNotEqual'),
                 node=assert_node,
@@ -151,7 +152,7 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            Message(
                 msg_id='wrong-assert',
                 args=('assertIsInstance(x, Class)', 'assertTrue(isinstance(x, Class))'),
                 node=assert_node,
@@ -186,7 +187,27 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            Message(
+                msg_id='wrong-assert',
+                args=('assertIsNotInstance(x, Class)', 'assertFalse(isinstance(x, Class))'),
+                node=assert_node,
+            ),
+        ):
+            self.checker.visit_classdef(class_node)
+            self.checker.visit_call(assert_node)
+            self.checker.leave_classdef(class_node)
+
+    def test_assertEqual_sets(self):
+        class_node, assert_node = astroid.extract_node("""
+        import unittest
+
+        class Tests(unittest.TestCase): #@
+            def test_foo():
+                self.assertEqual(set(a), {1, 2, 3}) #@
+        """)
+
+        with self.assertAddsMessages(
+            Message(
                 msg_id='wrong-assert',
                 args=('assertIsNotInstance(x, Class)', 'assertFalse(isinstance(x, Class))'),
                 node=assert_node,

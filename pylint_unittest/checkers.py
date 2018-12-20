@@ -14,23 +14,6 @@ MESSAGES = {
         'wrong-assert',
         "Used when a better unittest assertion than the one used is available"
     ),
-    'W%d02' % BASE_ID: (
-        "%s is deprecated, use %s instead",
-        'deprecated-unittest-alias',
-        "Used when the unittest method alias is deprecated"
-    ),
-}
-
-DEPRECATED_ALIASES = {
-    'failUnlessEqual': 'assertEqual',
-    'assertEquals': 'assertEqual',
-    'failIfEqual': 'assertNotEqual',
-    'failUnless': 'assertTrue',
-    '_assert': 'assertTrue',
-    'failIf': 'assertFalse',
-    'failUnlessRaises': 'assertRaises',
-    'failUnlessAlmostEqual': 'assertAlmostEqual',
-    'failIfAlmostEqual': 'assertNotAlmostEqual',
 }
 
 
@@ -92,10 +75,6 @@ class UnittestAssertionsChecker(BaseChecker):
                         args=('assertIsNone(x)', 'assertEqual(x, None)'),
                         node=node
                     )
-
-        if funcname in DEPRECATED_ALIASES:
-            new_name = DEPRECATED_ALIASES[funcname]
-            self.add_message('deprecated-unittest-alias', args=(funcname, new_name), node=node)
 
         if funcname in ('assertTrue', 'assertFalse'):
             if node.args:

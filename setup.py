@@ -17,8 +17,7 @@ setup(
     description='A Pylint plugin for detecting incorrect use of unittest assertions',
     long_description=read('README.rst'),
     version='0.1.2',
-    packages=find_packages(),
-    include_package_data=True,
+    packages=find_packages(exclude=['tests']),
     install_requires=[
         'pylint',
     ],
