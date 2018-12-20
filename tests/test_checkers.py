@@ -1,6 +1,5 @@
 import astroid
 import pylint_unittest
-import pylint.testutils
 from pylint.testutils import CheckerTestCase, Message
 
 
