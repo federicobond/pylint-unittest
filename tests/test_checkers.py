@@ -16,11 +16,12 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            pylint.testutils.MessageTest(
                 msg_id='wrong-assert',
                 args=('assertTrue(x) or assertIs(x, True)', 'assertEqual(x, True)'),
                 node=assert_node,
             ),
+            ignore_position=True
         ):
             self.checker.visit_classdef(class_node)
             self.checker.visit_call(assert_node)
@@ -36,11 +37,12 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            pylint.testutils.MessageTest(
                 msg_id='wrong-assert',
                 args=('assertFalse(x) or assertIs(x, False)', 'assertEqual(x, False)',),
                 node=assert_node,
             ),
+            ignore_position=True
         ):
             self.checker.visit_classdef(class_node)
             self.checker.visit_call(assert_node)
@@ -56,11 +58,12 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            pylint.testutils.MessageTest(
                 msg_id='wrong-assert',
                 args=('assertIsNone(x)', 'assertEqual(x, None)',),
                 node=assert_node,
             ),
+            ignore_position=True
         ):
             self.checker.visit_classdef(class_node)
             self.checker.visit_call(assert_node)
@@ -76,11 +79,12 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            pylint.testutils.MessageTest(
                 msg_id='wrong-assert',
                 args=('assertIsNone(x)', 'assertEqual(x, None)'),
                 node=assert_node,
             ),
+            ignore_position=True
         ):
             self.checker.visit_classdef(class_node)
             self.checker.visit_call(assert_node)
@@ -99,11 +103,12 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            pylint.testutils.MessageTest(
                 msg_id='wrong-assert',
                 args=('assertTrue(x) or assertIs(x, True)', 'assertEqual(x, True)'),
                 node=assert_node,
             ),
+            ignore_position=True
         ):
             self.checker.visit_classdef(class_node)
             self.checker.visit_call(assert_node)
@@ -131,11 +136,12 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            pylint.testutils.MessageTest(
                 msg_id='deprecated-unittest-alias',
                 args=('failIfEqual', 'assertNotEqual'),
                 node=assert_node,
             ),
+            ignore_position=True
         ):
             self.checker.visit_classdef(class_node)
             self.checker.visit_call(assert_node)
@@ -151,11 +157,12 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            pylint.testutils.MessageTest(
                 msg_id='wrong-assert',
                 args=('assertIsInstance(x, Class)', 'assertTrue(isinstance(x, Class))'),
                 node=assert_node,
             ),
+            ignore_position=True
         ):
             self.checker.visit_classdef(class_node)
             self.checker.visit_call(assert_node)
@@ -186,11 +193,12 @@ class TestUniqueReturnChecker(pylint.testutils.CheckerTestCase):
         """)
 
         with self.assertAddsMessages(
-            pylint.testutils.Message(
+            pylint.testutils.MessageTest(
                 msg_id='wrong-assert',
                 args=('assertIsNotInstance(x, Class)', 'assertFalse(isinstance(x, Class))'),
                 node=assert_node,
             ),
+            ignore_position=True
         ):
             self.checker.visit_classdef(class_node)
             self.checker.visit_call(assert_node)
