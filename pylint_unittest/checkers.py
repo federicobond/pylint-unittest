@@ -1,7 +1,6 @@
 from astroid.nodes import Call, ClassDef, FunctionDef, Expr, Const, Attribute, Name
 
-from pylint.interfaces import IAstroidChecker
-from pylint.checkers.utils import check_messages
+from pylint.checkers.utils import only_required_for_messages
 from pylint.checkers import BaseChecker
 
 from pylint_unittest.__pkginfo__ import BASE_ID
@@ -42,7 +41,6 @@ def is_self_method(node):
 
 class UnittestAssertionsChecker(BaseChecker):
     """Unittest assertions checker."""
-    __implements__ = IAstroidChecker
 
     name = 'unittest-assertions-checker'
     msgs = MESSAGES
@@ -58,7 +56,7 @@ class UnittestAssertionsChecker(BaseChecker):
     def leave_classdef(self, node):
         self._is_testcase = False
 
-    @check_messages('wrong-assert')
+    @only_required_for_messages('wrong-assert')
     def visit_call(self, node):
         if not self._is_testcase:
             return
